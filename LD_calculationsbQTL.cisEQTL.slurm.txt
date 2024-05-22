@@ -1,0 +1,17 @@
+#!/bin/sh
+#SBATCH --ntasks=2
+#SBATCH --mem-per-cpu=20G
+#SBATCH --time=06:00:00
+#SBATCH --partition=batch
+#SBATCH --output=%x.out
+#SBATCH --mail-type=ALL
+
+ml plink/1.90
+
+plink --bfile eGWAS340 --r2 --ld-window-r2 0 --ld-window-kb 10 --ld-window 99999  --extract bQTL.cisEQTL.txt  --out bQTL.cisEQTL.10kb.LD
+plink --bfile eGWAS340 --r2 --ld-window-r2 0 --ld-window-kb 10 --ld-window 99999  --extract bQTL.cisEQTL.random.txt --out bQTL.cisEQTL.10kb.LD.Random
+
+
+#eGWAS340: SNP dataset from Sun et al. 2023 (https://doi.org/10.6084/m9.figshare.19126139.v1) filtered on minor allele frequency ≥ 0.05
+#bQTL.cisEQTL.txt: file created from bQTL SNPs and most representative SNP in cis-eQTL
+#bQTL.cisEQTL.random.txt: file created from SNPs used in bQTL calculation in eGWAS340 and most representative SNP in cis-eQTL
